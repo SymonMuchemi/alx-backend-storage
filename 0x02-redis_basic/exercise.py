@@ -4,7 +4,7 @@
 
 import uuid
 from typing import Union
-from redis import Redis
+import redis
 
 
 class Cache:
@@ -12,7 +12,7 @@ class Cache:
 
     def __init__(self) -> None:
         """Instantiates the rdb and flushes the database."""
-        self._redis = Redis()
+        self._redis = redis.Redis()
         self._redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
