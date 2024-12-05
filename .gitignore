@@ -1,2 +1,3 @@
-.venv/
-.venv/
+**venv/*
+main.py
+0x02-redis_basic/__pycache__/*
