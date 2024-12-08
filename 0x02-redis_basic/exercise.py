@@ -9,6 +9,7 @@ import redis
 
 REDIS_TYPES = Union[str, bytes, memoryview]
 
+
 class Cache:
     """Redis cache blueprint"""
 
@@ -25,7 +26,8 @@ class Cache:
         return key
 
     def get(self, key: str, fn: Callable[[REDIS_TYPES], Any] = None) -> Any:
-        """Retrieves data from Redis and applies an optional conversion function."""
+        """Retrieves data from Redis and applies
+        an optional conversion function."""
         data = self._redis.get(key)
         if data is None:
             return None
@@ -35,7 +37,9 @@ class Cache:
 
     def get_str(self, key: str) -> Union[str, None]:
         """Retrieves data as a string."""
-        return self.get(key, lambda d: d.decode('utf-8') if isinstance(d, bytes) else d)
+        return self.get(
+            key,
+            lambda d: d.decode('utf-8') if isinstance(d, bytes) else d)
 
     def get_int(self, key: str) -> Union[int, None]:
         """Retrieves data as an integer."""
