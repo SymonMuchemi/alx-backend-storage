@@ -23,6 +23,7 @@ def count_calls(method: Callable) -> Callable:
 
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """Decorator to count how many times a method is called."""
     @wraps(method)
@@ -37,16 +38,19 @@ def call_history(method: Callable) -> Callable:
 
     return wrapper
 
+
 def replay(method: Callable) -> None:
     """Displays the history of calls of a particular function."""
     r = redis.Redis()
-    method_name = method.__qualname__
-    inputs = r.lrange(f"{method_name}:inputs", 0, -1)
-    outputs = r.lrange(f"{method_name}:outputs", 0, -1)
+    m_name = method.__qualname__
+    inputs = r.lrange(f"{m_name}:inputs", 0, -1)
+    outputs = r.lrange(f"{m_name}:outputs", 0, -1)
 
-    print(f"{method_name} was called {len(inputs)} times:")
+    print(f"{m_name} was called {len(inputs)} times:")
     for input, output in zip(inputs, outputs):
-        print(f"{method_name}(*{input.decode('utf-8')}) -> {output.decode('utf-8')}")
+        print(
+            f"{m_name}(*{input.decode('utf-8')}) -> {output.decode('utf-8')}")
+
 
 class Cache:
     """Redis cache blueprint"""
@@ -76,7 +80,10 @@ class Cache:
 
     def get_str(self, key: str) -> Union[str, None]:
         """Retrieves data as a string."""
-        return self.get(key, lambda d: d.decode("utf-8") if isinstance(d, bytes) else d)
+        return self.get(
+            key,
+            lambda d: d.decode("utf-8") if isinstance(d, bytes) else d
+            )
 
     def get_int(self, key: str) -> Union[int, None]:
         """Retrieves data as an integer."""
